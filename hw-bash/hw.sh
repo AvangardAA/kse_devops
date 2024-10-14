@@ -16,6 +16,21 @@ search_c()
     echo "Result: " && grep -i "$input" "$F" || echo "nothing found"
 }
 
+remove_c()
+{
+    echo "Input name, ph. number or email" && read input
+    tmp=$(mktemp)
+    grep -i -v "$input" "$F" > "$tmp"
+
+    if [ -s "$tmp" ]; then
+        mv "$tmp" "$F" && echo "removed"
+    elif grep -i -q "$input" "$F"; then
+        > "$F" && rm -f "$tmp"
+    else
+        echo "nothing found" && rm -f "$tmp"
+    fi
+}
+
 case "$1" in
     add)
         add_c
